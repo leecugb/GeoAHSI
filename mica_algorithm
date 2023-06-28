@@ -1,9 +1,14 @@
 import json
 import pandas as pd
 import numpy as np
-with open('expert_rules.json') as f:
+
+with open('./expert_rules.json') as f:
     rf=json.load(f)
-splib=pd.read_json('splib.json')
+with open('./colors_rules.json') as f:
+    colors_dic=json.load(f)
+splib=pd.read_json('./splib.json')
+splib['wave'] = splib['wave'].apply(lambda x:np.array(x))
+splib['rel'] = splib['rel'].apply(lambda x:np.array(x))
 
 class InvalidRangeError(BaseException):
     def __init__(self):
