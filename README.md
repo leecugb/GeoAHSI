@@ -6,4 +6,4 @@
 由于Kokaly提供的MICA算法实现是内嵌于基于IDL开发的PRISM(以ENVI插件方式运行)中的，其运行环境依赖商业授权，且运行效率并不是很高（一景高分五号影像处理超过一个小时，Z840实测），给国内高光谱遥感应用带来了困扰。鉴于此，本工程给出了mica算法的python生态实现。
 
 
-![Uploading image.png…]()
+![屏幕截图 2023-06-28 190133](https://github.com/leecugb/pymica/assets/38849659/2a9aa593-e85f-4d86-8dd1-7ac3eb2671e0)
