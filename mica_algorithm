@@ -1,3 +1,8 @@
+import json
+import pandas as pd
+with open('expert_rules.json') as f:
+    rf=json.load(f)
+splib=pd.read_json('splib.json')
 class InvalidRangeError(BaseException):
     def __init__(self):
         pass
@@ -163,14 +168,10 @@ def not_relative_feature(spectrum, reference, wl, CONTINUUM_ENDPTS, NOT_FEATURE_
             RELATIVE_FEATURE_DEPTH, NOT_FEATURE_RELATIVE_DEPTH_CONSTRAINTS):
     r2, depth = get_fit(spectrum, reference, wl, CONTINUUM_ENDPTS)
     mask_c= (r2>=NOT_FEATURE_FIT_CONSTRAINTS)
-    ####################################################################################
-    
     mask_c=mask_c & (depth>=(RELATIVE_FEATURE_DEPTH*NOT_FEATURE_RELATIVE_DEPTH_CONSTRAINTS))
     return mask_c
 
 def judge_reference_entry(spectrum, wl, key, resampled1, chanels):
-    #reference = dic.loc[rf['REFERENCE_SPECPR_RECORD'], 'data'][:124][chanels]
-    
     reference = resampled1[key][chanels]
     fit = np.zeros(len(spectrum))
     depth = np.zeros(len(spectrum))
@@ -200,7 +201,6 @@ def judge_reference_entry(spectrum, wl, key, resampled1, chanels):
         depth=depth+d
         fd=fd+fdd
     for i in rf[key]['not_abs']:
-        #reference = dic.loc[i[0],'data'][:124][chanels]
         reference = resampled1[i[0]][chanels]
         CONTINUUM_ENDPTS = i[1]
         NOT_FEATURE_FIT_CONSTRAINTS=i[2]
@@ -211,7 +211,6 @@ def judge_reference_entry(spectrum, wl, key, resampled1, chanels):
         depth[mask_c]=np.nan
         fd[mask_c]=np.nan
     for i in rf[key]['not_rel']:
-        #reference = dic.loc[i[0],'data'][:124][chanels]
         reference = resampled1[i[0]][chanels]
         CONTINUUM_ENDPTS=i[1]
         NOT_FEATURE_FIT_CONSTRAINTS=i[2]
@@ -236,4 +235,3 @@ def judge_reference_entry(spectrum, wl, key, resampled1, chanels):
     depth[~mask_c]=np.nan
     fd[~mask_c]=np.nan
     return fit, fd
-    #return fit
