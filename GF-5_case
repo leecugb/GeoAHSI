@@ -1,9 +1,9 @@
 from spectral import *
+from mica_algorithm import *
 from osgeo import gdal
 import os,re,shutil
 from xml.dom.minidom import parse
 import xml.dom.minidom
-dem_dir='/media/lee/新加卷/unpacked'
 def batch_process(pathname):
     img = open_image(pathname)
     spectrum=img.load()
@@ -35,7 +35,7 @@ def batch_process(pathname):
     wl=w[chanels]
     r,c,s=spectrum.shape
     mus_center=np.zeros(r*c,dtype='float')
-    image=np.zeros([r*c,6],dtype='uint8')
+    image=np.zeros([r*c,3],dtype='uint8')
     FIT_=np.zeros(r*c,dtype='float')
     DEPTH_=np.zeros(r*c,dtype='float')
     NUM_=np.zeros(r*c,dtype='uint8')
@@ -63,8 +63,7 @@ def batch_process(pathname):
         im=FIT.argmax(1)
         FIT_[a*c:b*c]   =FIT.flatten()[im+np.arange(len(im))*len(rf)]
         DEPTH_[a*c:b*c] =DEPTH.flatten()[im+np.arange(len(im))*len(rf)]
-        NUM_[a*c:b*c]   =im
-        
+        NUM_[a*c:b*c]   =im 
         images=np.zeros([len(spectrum1),3],dtype='uint8')
         k=0
         for i in im:
@@ -91,24 +90,14 @@ def batch_process(pathname):
             center=get_quadratic_center(spectrum1, wl, rf[item]['diagnostic'][0][1], t_mask)
             center[np.isnan(center)]=0
             mus_center[a*c:b*c]=mus_center[a*c:b*c]+center
-    tem=spectrum[:,:,1].flatten()
-    tem=(tem-tem.min())/(tem.max()-tem.min())*255
-    image[:,3]=tem
-    tem=spectrum[:,:,30].flatten()
-    tem=(tem-tem.min())/(tem.max()-tem.min())*255
-    image[:,4]=tem
-    tem=spectrum[:,:,60].flatten()
-    tem=(tem-tem.min())/(tem.max()-tem.min())*255
-    image[:,5]=tem
+    
     driver = gdal.GetDriverByName('GTiff')
-    raster = driver.Create(os.path.split(pathname)[0]+'/lee1.tiff', c,r,6 ,gdal.GDT_Byte)
+    raster = driver.Create(os.path.split(pathname)[0]+'/mica.tiff', c,r,3 ,gdal.GDT_Byte)
     raster.SetMetadataItem('AREA_OR_POINT', 'Point')
-    for i in range(6):
+    for i in range(3):
         raster.GetRasterBand(i+1).WriteArray(image[:,i].reshape([r,c]))
         raster.FlushCache()
     raster=None
-    
-    
     image_=np.zeros([r*c,3],dtype='uint8')
     image_[mus_center<2.199]=table[0]
     image_[(mus_center>=2.199)&(mus_center<2.2)]=table[1]
@@ -122,19 +111,13 @@ def batch_process(pathname):
     image_[mus_center>=2.207]=table[9]
     image_[mus_center<2.195]=[0,0,0]
     image_[mus_center>=2.226]=[0,0,0]
-    
-    
     driver = gdal.GetDriverByName('GTiff')
-    raster = driver.Create(os.path.split(pathname)[0]+'/mus1.tiff', c,r,3 ,gdal.GDT_Byte)
+    raster = driver.Create(os.path.split(pathname)[0]+'/mus_wv.tiff', c,r,3 ,gdal.GDT_Byte)
     raster.SetMetadataItem('AREA_OR_POINT', 'Point')
-    
     for i in range(3):
         raster.GetRasterBand(i+1).WriteArray(image_[:,i].reshape([r,c]))
         raster.FlushCache()
     raster=None
-
-    
-    
     mask=FIT_>0
     images=np.zeros([r*c,3],dtype='uint8')
     for i in index:
@@ -153,60 +136,9 @@ def batch_process(pathname):
         im[:,2]=dep
         images[mask1]=hsi2rgb(im)*255
     driver = gdal.GetDriverByName('GTiff')
-    raster = driver.Create(os.path.split(pathname)[0]+'/color_enhanced2.tiff', c,r,3 ,gdal.GDT_Byte)
+    raster = driver.Create(os.path.split(pathname)[0]+'/mica_color_enhanced.tiff', c,r,3 ,gdal.GDT_Byte)
     raster.SetMetadataItem('AREA_OR_POINT', 'Point')
     for i in range(3):
         raster.GetRasterBand(i+1).WriteArray(images[:,i].reshape([r,c]))
         raster.FlushCache()
     raster=None
-        
-    rpb = None
-    for i in os.listdir(os.path.split(pathname)[0]):
-        if re.match(r'.*SW\.rpb$',i):
-            rpb=i
-    if rpb is None:
-        print(pathname+': associated rpc file not found!')
-        return
-    shutil.copy(os.path.split(pathname)[0]+'/'+rpb, os.path.split(pathname)[0]+'/lee1.rpb')
-    shutil.copy(os.path.split(pathname)[0]+'/'+rpb, os.path.split(pathname)[0]+'/mus1.rpb')
-    shutil.copy(os.path.split(pathname)[0]+'/'+rpb, os.path.split(pathname)[0]+'/color_enhanced2.rpb')
-    #meta=None
-    #for i in os.listdir(os.path.split(pathname)[0]):
-        #if re.match(r'GF5.*\.xml',i):
-            #meta=i
-    #if meta == None:
-        #print(pathname+': associated meta file not found!')
-        #return
-    meta=os.path.split(pathname)[0]+'/'+os.path.split(os.path.split(pathname)[0])[1]+'.xml'
-    name=os.path.split(os.path.split(pathname)[0])[1]
-    if not os.path.isfile(meta):
-        print(pathname+': associated meta file not found!')
-        return
-    DOMTree = xml.dom.minidom.parse(meta)
-    collection = DOMTree.documentElement
-    TopLeftLatitude = float(collection.getElementsByTagName('TopLeftLatitude')[0].childNodes[0].data)
-    TopLeftLongitude = float(collection.getElementsByTagName('TopLeftLongitude')[0].childNodes[0].data)
-    TopRightLatitude = float(collection.getElementsByTagName('TopRightLatitude')[0].childNodes[0].data)
-    TopRightLongitude = float(collection.getElementsByTagName('TopRightLongitude')[0].childNodes[0].data)
-
-    BottomRightLatitude = float(collection.getElementsByTagName('BottomRightLatitude')[0].childNodes[0].data)
-    BottomRightLongitude = float(collection.getElementsByTagName('BottomRightLongitude')[0].childNodes[0].data)
-    BottomLeftLatitude = float(collection.getElementsByTagName('BottomLeftLatitude')[0].childNodes[0].data)
-    BottomLeftLongitude = float(collection.getElementsByTagName('BottomLeftLongitude')[0].childNodes[0].data)
-
-    lat_max=(lambda x,y:x if x>y else y)(TopLeftLatitude, TopRightLatitude)
-    lat_min=(lambda x,y:x if x<y else y)(BottomRightLatitude,BottomLeftLatitude)
-    lon_max=(lambda x,y:x if x>y else y)(TopRightLongitude,BottomRightLongitude)
-    lon_min=(lambda x,y:x if x<y else y)(TopLeftLongitude,BottomLeftLongitude)
-    
-    lat_center = (lat_max + lat_min) / 2
-    lon_center = (lon_min + lon_max) / 2
-    
-    de=[]
-    for i in range(int(np.floor(lat_min)),int(np.ceil(lat_max))):
-        for j in range(int(np.floor(lon_min)),int(np.ceil(lon_max))):
-            de.append(dem_dir+'/N{:02d}E{:03d}.hgt'.format(i,j))
-    os.system('gdal_merge.py -of GTiff -o "'+os.path.split(pathname)[0]+'/dem.tif" '+ ' '.join(de))
-    os.system('gdalwarp -overwrite -rpc -to "RPC_DEM='+os.path.split(pathname)[0]+'/dem.tif" '+'-t_srs '+'"+proj=utm +zone='+int(np.ceil(lon_center/6)+30).__str__() +' datum=WGS84 +units=m +no_defs"' +' -tr 30 30'+ ' -r near  "'+os.path.split(pathname)[0]+'/lee1.tiff" "' +os.path.split(pathname)[0]+'/'+name+'_mica_orth.tiff"')
-    os.system('gdalwarp -overwrite -rpc -to "RPC_DEM='+os.path.split(pathname)[0]+'/dem.tif" '+'-t_srs '+'"+proj=utm +zone='+int(np.ceil(lon_center/6)+30).__str__() +' datum=WGS84 +units=m +no_defs"' +' -tr 30 30'+ ' -r near  "'+os.path.split(pathname)[0]+'/mus1.tiff" "' +os.path.split(pathname)[0]+'/'+name+'_mus_orth.tiff"')
-    os.system('gdalwarp -overwrite -rpc -to "RPC_DEM='+os.path.split(pathname)[0]+'/dem.tif" '+'-t_srs '+'"+proj=utm +zone='+int(np.ceil(lon_center/6)+30).__str__() +' datum=WGS84 +units=m +no_defs"' +' -tr 30 30'+ ' -r near  "'+os.path.split(pathname)[0]+'/color_enhanced2.tiff" "' +os.path.split(pathname)[0]+'/'+name+'_color_enhanced_orth.tiff"')
