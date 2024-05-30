@@ -6,22 +6,23 @@ GeoAHSI (Geological mapper for AHSI)是一个基于纯Python生态的国产（�
 示例
 -------------
 
->>> from ahsi import *
-
 1.打开影像文件，并执行光谱分析
+
 将经大气校正影像（ENVI格式，含路径）作为参数调用geo_map()。
 
->>> geo_map('./data/ZY1E_AHSI_E96.59_N41.04_20220929_015969_L1A0000509267/flaash.hdr') # load reflectance image cube and execute spectrum analysis
+        from ahsi import *
+        geo_map('./data/ZY1E_AHSI_E96.59_N41.04_20220929_015969_L1A0000509267/flaash.hdr') # load reflectance image cube and execute spectrum analysis
 
 geo_map()会在源影像文件的目录下生成三个GeoTiff文件：mineral_map.tiff, mineral_color_enhanced.tiff, muscovite_wv.tiff。它们分别代表光谱主导矿物类别分布图、吸收深度（经归一化拉伸）做明度分量的光谱主导矿物类别分布图和白云母2200nm吸收特征波长分布图。
+
 2.快速可视化
 
->>> with gdal.Open('./data/ZY1E_AHSI_E96.59_N41.04_20220929_015969_L1A0000509267/mineral_map.tiff') as f:
-        img = f.ReadAsArray()
->>> plt.figure(figsize=(16, 15), dpi=300)
->>> plt.imshow(image)
->>> patches = [mpatches.Patch(color=[i/255 for i in value], label="{l}".format(l=key)) for key, value in colors_dic.items()]
->>> plt.legend(handles=patches, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+        with gdal.Open('./data/ZY1E_AHSI_E96.59_N41.04_20220929_015969_L1A0000509267/mineral_map.tiff') as f:
+                img = f.ReadAsArray()
+        plt.figure(figsize=(16, 15), dpi=300)
+        plt.imshow(image)
+        patches = [mpatches.Patch(color=[i/255 for i in value], label="{l}".format(l=key)) for key, value in colors_dic.items()]
+        plt.legend(handles=patches, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
 
 ![屏幕截图 2023-06-28 190133](https://github.com/leecugb/pymica/assets/38849659/2a9aa593-e85f-4d86-8dd1-7ac3eb2671e0)
 
