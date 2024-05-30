@@ -1,5 +1,5 @@
 from spectral import *
-from mica_algorithm import *
+from ahsi_algorithm import *
 from osgeo import gdal
 import os,re,shutil
 from xml.dom.minidom import parse
