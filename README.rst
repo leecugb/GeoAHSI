@@ -7,11 +7,15 @@ GeoAHSI (Geological mapper for AHSI)是一个基于纯Python生态的国产（�
 -------------
 
 >>> from ahsi import *
+
 1.打开影像文件，并执行光谱分析
 将经大气校正影像（ENVI格式，含路径）作为参数调用geo_map()。
+
 >>> geo_map('./data/ZY1E_AHSI_E96.59_N41.04_20220929_015969_L1A0000509267/flaash.hdr') # load reflectance image cube and execute spectrum analysis
+
 geo_map()会在源影像文件的目录下生成三个GeoTiff文件：mineral_map.tiff, mineral_color_enhanced.tiff, muscovite_wv.tiff。它们分别代表光谱主导矿物类别分布图、吸收深度（经归一化拉伸）做明度分量的光谱主导矿物类别分布图和白云母2200nm吸收特征波长分布图。
 2.快速可视化
+
 >>> with gdal.Open('./data/ZY1E_AHSI_E96.59_N41.04_20220929_015969_L1A0000509267/mineral_map.tiff') as f:
         img = f.ReadAsArray()
 >>> plt.figure(figsize=(16, 15), dpi=300)
@@ -28,6 +32,9 @@ geo_map()会在源影像文件的目录下生成三个GeoTiff文件：mineral_ma
 参考文献
 -------------
 [1]Clark, R.N., Swayze, G.A., Livo, K.E., Kokaly, R.F., Sutley, S.J., Dalton, J.B., McDougal, R.R., and Gent, C.A., 2003, Imaging spectroscopy—Earth and planetary remote sensing with the USGS Tetracorder and expert systems: Journal of Geophysical Research, v. 108, no. E12, p. 5-1 to 5-44, doi:10.1029/2002JE001847.
+
 [2]Clark, R.N., Swayze, G.A., Wise, R., Livo, E., Hoefen, T., Kokaly, R., and Sutley, S.J., 2007, USGS digital spectral library splib06a: U.S. Geological Survey Digital Data Series 231.
+
 [3]Kokaly, R.F., 2011, PRISM: Processing routines in IDL for spectroscopic measurements (installation manual and user’s guide, version 1.0): U.S. Geological Survey Open-File Report 2011-1155, 432 p.
+
 [4]Livo, K.E., Clark, R.N., 2014, The Tetracorder user guide—Version 4.4: U.S. Geological Survey, Open-File Report 2013‒1300, 52 p., http://dx.doi.org/10.3133/ofr20131300.
