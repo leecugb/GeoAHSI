@@ -244,7 +244,7 @@ def judge_reference_entry(spectrum, wl, key, resampled1, chanels):
     return fit, fd
 
 
-def batch_process(pathname,b_n):
+def geo_map(pathname,b_n):
     img = open_image(pathname)
     spectrum=img.load()
     w=np.array([float(i) for i in img.metadata['wavelength']])/1000
