@@ -38,6 +38,9 @@ geo_map()会在源影像文件的目录下生成三个GeoTiff文件：mineral_ma
 
 我们使用该工具完成了东天山-北山成矿带、阿尔泰-准噶尔北缘成矿带和阿尔金成矿带近100万平方千米的国产高光谱遥感卫星矿物填图工作，相关数据成果参见[地质云](https://geocloud.cgs.gov.cn/topic/view?id=1686360171308183554)。
 
+![](https://github.com/leecugb/GeoAHSI/blob/main/%E4%B8%9C%E5%A4%A9%E5%B1%B1-%E5%8C%97%E5%B1%B1%E6%88%90%E7%9F%BF%E5%B8%A6%E9%AB%98%E5%85%89%E8%B0%B1%E7%9F%BF%E7%89%A9%E5%A1%AB%E5%9B%BEgit.jpg)
+
+
 参考文献
 -------------
 
