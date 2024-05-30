@@ -5,14 +5,11 @@ GeoAHSI (Geological mapper for AHSI)是一个基于纯Python生态的国产（�
 
 
 ```mermaid
-graph LR
+graph TD
 A[load Image Cube] -->B[convole the reference Spectral Library to the AHSI's spectral resolution]
     B --> C[perform Weighted Fitting for Absorption Features]
     C --> D[Sort Fit Cube and Create Color-coded Maps]
 ```
-
-
-
 
 示例
 -------------
