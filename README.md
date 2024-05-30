@@ -3,7 +3,6 @@
 
 GeoAHSI (Geological mapper for AHSI)是一个基于纯Python生态的国产（中国）高光谱遥感卫星矿物填图工具包，它继承了由Roger N. Clark等开发的Tetracorder系统的理论基础和算法，并吸纳了Kokaly等（2011）对Tetracorder所做的部分简化。GeoAHSI的输入数据为经大气校正得到的地表反射率影像（ENVI Header格式），我们称其为Image Cube（m×n×k matrix，m代表行数，n代表列数，k代表波段数）。GeoAHSI执行矿物填图分为三个步骤：首先，通过将Image Cube与从USGS Spectral Library 06（Clark et al. 2007）中筛选的参考矿物光谱进行匹配来计算它们的诊断光谱特征在Image Cube中的信号强度（相关性+吸收深度），得到Fit Cube（m×n×s matrix，s代表参考矿物光谱数量）和Depth Cube（m×n×s matrix）；然后，计算Fit Cube中沿第三维度（维数s）最大值对应的索引，降维得到Mineral Map（m×n matrix），并使用该索引检索Depth Cube得到Depth Map（m×n matrix）；最后，根据预设的颜色表为Mineral Map“赋色”，生成Color-Coded Map。在赋色的过程中，可以使用Depth Map经拉伸处理作为明度分量，从而呈现更加细腻的填图效果。
 
-
 ```mermaid
 graph TD
 A[load Image Cube] -->B[convole the reference Spectral Library to the AHSI's spectral resolution]
@@ -50,4 +49,4 @@ geo_map()会在源影像文件的目录下生成三个GeoTiff文件：mineral_ma
 
 [4]Livo, K.E., Clark, R.N., 2014, The Tetracorder user guide—Version 4.4: U.S. Geological Survey, Open-File Report 2013‒1300, 52 p.
 
-*出于简约展示光谱分析算法的目的，我们删减了空间处理部分代码*
+*出于简约展示光谱分析算法的目的，我们删减了空间处理部分代码。*
