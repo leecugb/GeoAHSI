@@ -38,4 +38,4 @@ geo_map()会在源影像文件的目录下生成三个GeoTiff文件：mineral_ma
 
 [3]Kokaly, R.F., 2011, PRISM: Processing routines in IDL for spectroscopic measurements (installation manual and user’s guide, version 1.0): U.S. Geological Survey Open-File Report 2011-1155, 432 p.
 
-[4]Livo, K.E., Clark, R.N., 2014, The Tetracorder user guide—Version 4.4: U.S. Geological Survey, Open-File Report 2013‒1300, 52 p., http://dx.doi.org/10.3133/ofr20131300.
+[4]Livo, K.E., Clark, R.N., 2014, The Tetracorder user guide—Version 4.4: U.S. Geological Survey, Open-File Report 2013‒1300, 52 p.
