@@ -1,11 +1,15 @@
 import json
 import pandas as pd
 import numpy as np
+from spectral import open_image
+from osgeo import gdal
 
 with open('./expert_rules.json') as f:
     rf=json.load(f)
+    
 with open('./colors_rules.json') as f:
     colors_dic=json.load(f)
+    
 splib=pd.read_json('./splib.json')
 splib['wave'] = splib['wave'].apply(lambda x:np.array(x))
 splib['rel'] = splib['rel'].apply(lambda x:np.array(x))
@@ -243,7 +247,6 @@ def judge_reference_entry(spectrum, wl, key, resampled1, chanels):
     fd[~mask_c]=np.nan
     return fit, fd
 
-
 def geo_map(pathname,b_n):
     img = open_image(pathname)
     spectrum=img.load()
@@ -331,7 +334,7 @@ def geo_map(pathname,b_n):
             center[np.isnan(center)]=0
             mus_center[a*c:b*c]=mus_center[a*c:b*c]+center
     driver = gdal.GetDriverByName('GTiff')
-    raster = driver.Create(os.path.split(pathname)[0]+'/mica.tiff', c,r,3 ,gdal.GDT_Byte)
+    raster = driver.Create(os.path.split(pathname)[0]+'/mineral_map.tiff', c,r,3 ,gdal.GDT_Byte)
     raster.SetMetadataItem('AREA_OR_POINT', 'Point')
     for i in range(3):
         raster.GetRasterBand(i+1).WriteArray(image[:,i].reshape([r,c]))
@@ -363,7 +366,7 @@ def geo_map(pathname,b_n):
     image_[mus_center<2.195]=[0,0,0]
     image_[mus_center>=2.226]=[0,0,0]
     driver = gdal.GetDriverByName('GTiff')
-    raster = driver.Create(os.path.split(pathname)[0]+'/mus_wv.tiff', c,r,3 ,gdal.GDT_Byte)
+    raster = driver.Create(os.path.split(pathname)[0]+'/muscovite_wv.tiff', c,r,3 ,gdal.GDT_Byte)
     raster.SetMetadataItem('AREA_OR_POINT', 'Point')
     for i in range(3):
         raster.GetRasterBand(i+1).WriteArray(image_[:,i].reshape([r,c]))
@@ -387,7 +390,7 @@ def geo_map(pathname,b_n):
         im[:,2]=dep
         images[mask1]=hsi2rgb(im)*255
     driver = gdal.GetDriverByName('GTiff')
-    raster = driver.Create(os.path.split(pathname)[0]+'/mica_color_enhanced.tiff', c,r,3 ,gdal.GDT_Byte)
+    raster = driver.Create(os.path.split(pathname)[0]+'/mineral_color_enhanced.tiff', c,r,3 ,gdal.GDT_Byte)
     raster.SetMetadataItem('AREA_OR_POINT', 'Point')
     for i in range(3):
         raster.GetRasterBand(i+1).WriteArray(images[:,i].reshape([r,c]))
