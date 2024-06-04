@@ -5,6 +5,12 @@ GeoAHSI (Geological mapper for AHSI)是一个基于纯Python生态的国产（�
 
 ![](https://github.com/leecugb/GeoAHSI/blob/main/workflow.jpg)
 
+<div align="center">
+    <img src="[image.jpg](https://github.com/leecugb/GeoAHSI/blob/main/workflow.jpg)" alt="描述文字" width="500" height="300">
+</div>
+
+
+
 示例
 -------------
 
