@@ -22,16 +22,15 @@ geo_map()会在源影像文件的目录下生成三个GeoTiff文件：mineral_ma
 2.快速可视化
 
         with gdal.Open('./data/ZY1E_AHSI_E96.59_N41.04_20220929_015969_L1A0000509267/mineral_map.tiff') as f:
-                img = f.ReadAsArray()
+            img = f.ReadAsArray()
         plt.figure(figsize=(16, 15), dpi=300)
         plt.imshow(image)
         patches = [mpatches.Patch(color=[i/255 for i in value], label="{l}".format(l=key)) for key, value in colors_dic.items()]
         plt.legend(handles=patches, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
 
-![屏幕截图 2023-06-28 190133](https://github.com/leecugb/pymica/assets/38849659/2a9aa593-e85f-4d86-8dd1-7ac3eb2671e0)
 
 <div align="center">
-    <img src="https://github.com/leecugb/pymica/assets/38849659/2a9aa593-e85f-4d86-8dd1-7ac3eb2671e0" width="600px" alt="GeoAHSI work flow">
+    <img src="https://github.com/leecugb/pymica/assets/38849659/2a9aa593-e85f-4d86-8dd1-7ac3eb2671e0" width="800px" alt="GeoAHSI work flow">
 </div>
 
 行业应用
@@ -39,12 +38,9 @@ geo_map()会在源影像文件的目录下生成三个GeoTiff文件：mineral_ma
 
 我们使用该工具完成了东天山-北山成矿带、阿尔泰-准噶尔北缘成矿带和阿尔金成矿带近100万平方千米的国产高光谱遥感卫星矿物填图工作，相关数据成果参见[地质云](https://geocloud.cgs.gov.cn/topic/view?id=1686360171308183554)。
 
-![](https://github.com/leecugb/GeoAHSI/blob/main/Mineral_Map_of_Dongtianshan-Beishan_Metallogenic_Belts.jpg)
-
 <div align="center">
-    <img src="https://github.com/leecugb/GeoAHSI/blob/main/Mineral_Map_of_Dongtianshan-Beishan_Metallogenic_Belts.jpg" width="600px" alt="GeoAHSI work flow">
+    <img src="https://github.com/leecugb/GeoAHSI/blob/main/Mineral_Map_of_Dongtianshan-Beishan_Metallogenic_Belts.jpg" width="900px" alt="GeoAHSI work flow">
 </div>
-
 
 参考文献
 -------------
@@ -57,4 +53,4 @@ geo_map()会在源影像文件的目录下生成三个GeoTiff文件：mineral_ma
 
 [4]Livo, K.E., Clark, R.N., 2014, The Tetracorder user guide—Version 4.4: U.S. Geological Survey, Open-File Report 2013‒1300, 52 p.
 
-*出于简约展示光谱分析算法的目的，我们删减了空间处理部分代码。*
+*出于简约展示光谱分析算法的目的，删减了地理空间处理部分代码。待后续更新*
