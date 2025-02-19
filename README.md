@@ -42,15 +42,6 @@ geo_map()会在源影像文件的目录下生成三个GeoTiff文件：mineral_ma
     <img src="https://github.com/leecugb/GeoAHSI/blob/main/Mineral_Map_of_Dongtianshan-Beishan_Metallogenic_Belts.jpg" width="900px" alt="GeoAHSI work flow">
 </div>
 
-参考文献
--------------
 
-[1]Clark, R.N., Swayze, G.A., Livo, K.E., Kokaly, R.F., Sutley, S.J., Dalton, J.B., McDougal, R.R., and Gent, C.A., 2003, Imaging spectroscopy—Earth and planetary remote sensing with the USGS Tetracorder and expert systems: Journal of Geophysical Research, v. 108, no. E12, p. 5-1 to 5-44, doi:10.1029/2002JE001847.
-
-[2]Clark, R.N., Swayze, G.A., Wise, R., Livo, E., Hoefen, T., Kokaly, R., and Sutley, S.J., 2007, USGS digital spectral library splib06a: U.S. Geological Survey Digital Data Series 231.
-
-[3]Kokaly, R.F., 2011, PRISM: Processing routines in IDL for spectroscopic measurements (installation manual and user’s guide, version 1.0): U.S. Geological Survey Open-File Report 2011-1155, 432 p.
-
-[4]Livo, K.E., Clark, R.N., 2014, The Tetracorder user guide—Version 4.4: U.S. Geological Survey, Open-File Report 2013‒1300, 52 p.
 
 *出于简约展示光谱分析算法的目的，删减了地理空间处理部分代码。待后续更新*
